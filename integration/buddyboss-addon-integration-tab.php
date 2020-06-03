@@ -6,54 +6,65 @@
  */
 
 // Exit if accessed directly.
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit();
 
 /**
  * Setup Compatibility integration admin tab class.
  *
  * @since BuddyBoss 1.1.5
  */
-class PHOTOCAT_BuddyBoss_Admin_Integration_Tab extends BP_Admin_Integration_tab {
-	public function initialize() {
-		$this->tab_order       = 60;
-	}
+class PHOTOCAT_BuddyBoss_Admin_Integration_Tab extends BP_Admin_Integration_tab
+{
+    public function initialize()
+    {
+        $this->tab_order = 60;
+    }
 
-	public function is_active() {
-		return true;
-	}
+    public function is_active()
+    {
+        return true;
+    }
 
-	/**
-	 * Register setting fields
-	 */
-	public function register_fields() {
+    /**
+     * Register setting fields
+     */
+    public function register_fields()
+    {
+        $sections = PHOTOCAT_get_settings_sections();
 
-		$sections = PHOTOCAT_get_settings_sections();
+        foreach ((array) $sections as $section_id => $section) {
+            // Only add section and fields if section has fields
+            $fields = PHOTOCAT_get_settings_fields_for_section($section_id);
 
-		foreach ( (array) $sections as $section_id => $section ) {
+            if (empty($fields)) {
+                continue;
+            }
 
-			// Only add section and fields if section has fields
-			$fields = PHOTOCAT_get_settings_fields_for_section( $section_id );
+            $section_title = !empty($section['title']) ? $section['title'] : '';
+            $section_callback = !empty($section['callback'])
+                ? $section['callback']
+                : false;
 
-			if ( empty( $fields ) ) {
-				continue;
-			}
+            // Add the section
+            $this->add_section($section_id, $section_title, $section_callback);
 
-			$section_title    = ! empty( $section['title'] ) ? $section['title'] : '';
-			$section_callback = ! empty( $section['callback'] ) ? $section['callback'] : false;
+            // Loop through fields for this section
+            foreach ((array) $fields as $field_id => $field) {
+                $field['args'] = isset($field['args']) ? $field['args'] : [];
 
-			// Add the section
-			$this->add_section( $section_id, $section_title, $section_callback );
-
-			// Loop through fields for this section
-			foreach ( (array) $fields as $field_id => $field ) {
-
-				$field['args'] = isset( $field['args'] ) ? $field['args'] : array();
-
-				if ( ! empty( $field['callback'] ) && ! empty( $field['title'] ) ) {
-					$sanitize_callback = isset( $field['sanitize_callback'] ) ? $field['sanitize_callback'] : [];
-					$this->add_field( $field_id, $field['title'], $field['callback'], $sanitize_callback, $field['args'] );
-				}
-			}
-		}
-	}
+                if (!empty($field['callback']) && !empty($field['title'])) {
+                    $sanitize_callback = isset($field['sanitize_callback'])
+                        ? $field['sanitize_callback']
+                        : [];
+                    $this->add_field(
+                        $field_id,
+                        $field['title'],
+                        $field['callback'],
+                        $sanitize_callback,
+                        $field['args']
+                    );
+                }
+            }
+        }
+    }
 }
