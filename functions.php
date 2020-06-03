@@ -48,49 +48,82 @@ if ( ! function_exists( 'PHOTOCAT_get_settings_fields' ) ) {
 		$fields = array();
 
 		$fields['PHOTOCAT_settings_section'] = array(
-
-			'PHOTOCAT_field' => array(
-				'title'             => __( 'Add-on Field', 'buddyboss-photo-categorization' ),
-				'callback'          => 'PHOTOCAT_settings_callback_field',
+			'PHOTOCAT_cat_number' => array(
+				'title'             => __( 'Category count', 'buddyboss-photo-categorization' ),
+				'callback'          => 'PHOTOCAT_settings_callback_category_count',
 				'sanitize_callback' => 'absint',
 				'args'              => array(),
 			),
-
 		);
+
+		$cat_number = intval(get_option( 'PHOTOCAT_cat_number', "1" ));
+
+		// TODO: definitely not the best way to store the settings, but will work
+		// well enough for the proof of concept draft.
+		for ($i = 1; $i <= $cat_number; $i++) {
+			$fields['PHOTOCAT_settings_section']["PHOTOCAT_categories_$i"] =
+				array(
+					'title'             => "$i. ".__( "Label", 'buddyboss-photo-categorization' ),
+					'callback'          => 'PHOTOCAT_settings_callback_categories',
+					'sanitize_callback' => 'text',
+					'args'              => $i,
+				);
+				$fields['PHOTOCAT_settings_section']["PHOTOCAT_category_options_$i"] =
+				array(
+					'title'             => "$i. ".__( "Options", 'buddyboss-photo-categorization' ),
+					'callback'          => 'PHOTOCAT_settings_callback_category_options',
+					'sanitize_callback' => 'text',
+					'args'              => $i,
+				);
+		}
 
 		return (array) apply_filters( 'PHOTOCAT_get_settings_fields', $fields );
 	}
 }
 
-if ( ! function_exists( 'PHOTOCAT_settings_callback_field' ) ) {
-	function PHOTOCAT_settings_callback_field() {
+if ( ! function_exists( 'PHOTOCAT_settings_callback_category_count' ) ) {
+	function PHOTOCAT_settings_callback_category_count() {
 		?>
-        <input name="PHOTOCAT_field"
-               id="PHOTOCAT_field"
-               type="checkbox"
-               value="1"
-			<?php checked( PHOTOCAT_is_addon_field_enabled() ); ?>
+        <input name="PHOTOCAT_cat_number"
+               id="PHOTOCAT_cat_number"
+							 type="number"
+							 min="1"
+							 max="10"
+               value="<?php echo get_option( 'PHOTOCAT_cat_number', "1" ); ?>"
         />
-        <label for="PHOTOCAT_field">
-			<?php _e( 'Enable this option', 'buddyboss-photo-categorization' ); ?>
-        </label>
+        <label for="PHOTOCAT_cat_number"> &nbsp;(1 - 10) </label>
 		<?php
 	}
 }
 
-if ( ! function_exists( 'PHOTOCAT_is_addon_field_enabled' ) ) {
-	function PHOTOCAT_is_addon_field_enabled( $default = 1 ) {
-		return (bool) apply_filters( 'PHOTOCAT_is_addon_field_enabled', (bool) get_option( 'PHOTOCAT_field', $default ) );
+if ( ! function_exists( 'PHOTOCAT_settings_callback_categories' ) ) {
+	function PHOTOCAT_settings_callback_categories($i) {
+		$category = get_option("PHOTOCAT_categories_$i", '');
+		echo "<input name='PHOTOCAT_categories_$i'	placeholder='".__( 'Category name', 'buddyboss-photo-categorization' )."' type='text' value='$category'/>";
 	}
 }
 
-/**************************************** MY PLUGIN INTEGRATION ************************************/
+if ( ! function_exists( 'PHOTOCAT_settings_callback_category_options' ) ) {
+	function PHOTOCAT_settings_callback_category_options($i) {
+		$value = get_option("PHOTOCAT_category_options_$i", '');
+		echo "<input id='PHOTOCAT_category_options_$i' name='PHOTOCAT_category_options_$i' placeholder='option1; option2; ...' type='text' size='40' value='$value'/>";
+	}
+}
 
-/**
- * Set up the my plugin integration.
- */
+/***************************** MY PLUGIN INTEGRATION *************************/
+
 function PHOTOCAT_register_integration() {
 	require_once dirname( __FILE__ ) . '/integration/buddyboss-integration.php';
 	buddypress()->integrations['addon'] = new PHOTOCAT_BuddyBoss_Integration();
 }
 add_action( 'bp_setup_integrations', 'PHOTOCAT_register_integration' );
+
+
+if ( ! function_exists( 'PHOTOCAT_f_log' ) ) {
+	function PHOTOCAT_f_log($log_name, $str) {
+		$log_file = $_SERVER['DOCUMENT_ROOT'] . "/logs/$log_name.log";
+		$fp = fopen($log_file, 'a');
+		fwrite($fp, "$str\n");
+		fclose($fp);
+	}
+}
