@@ -18,9 +18,9 @@ class PHOTOCAT_BuddyBoss_Integration extends BP_Integration
     public function __construct()
     {
         $this->start(
-            'add-on',
-            __('Add-on', 'buddyboss-photo-categorization'),
-            'add-on',
+            'photo-cat',
+            __('Photo Categorization', 'buddyboss-photo-categorization'),
+            'photo-cat',
             [
                 'required_plugin' => [],
             ]
@@ -67,7 +67,7 @@ class PHOTOCAT_BuddyBoss_Integration extends BP_Integration
                 '<a href="' .
                 esc_url(
                     bp_get_admin_url(
-                        'admin.php?page=bp-integrations&tab=bp-add-on'
+                        'admin.php?page=bp-integrations&tab=bp-photo-cat'
                     )
                 ) .
                 '">' .
