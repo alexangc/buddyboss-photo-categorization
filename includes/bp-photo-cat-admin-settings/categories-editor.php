@@ -1,20 +1,5 @@
 <?php
-// Exit if accessed directly
 defined('ABSPATH') || exit();
-
-if (!function_exists('PHOTOCAT_admin_enqueue_script')) {
-    function PHOTOCAT_admin_enqueue_script()
-    {
-        wp_enqueue_style(
-            'buddyboss-addon-admin-css',
-            plugin_dir_url(__FILE__) . 'style.css'
-        );
-    }
-
-    add_action('admin_enqueue_scripts', 'PHOTOCAT_admin_enqueue_script');
-}
-
-/************ Setting block in 'BuddyBoss > Integrations > Add-on ************/
 
 if (!function_exists('PHOTOCAT_get_settings_sections')) {
     function PHOTOCAT_get_settings_sections()
@@ -154,22 +139,4 @@ if (!function_exists('PHOTOCAT_settings_callback_category_options')) {
         <?php
     }
 }
-
-/***************************** MY PLUGIN INTEGRATION *************************/
-
-function PHOTOCAT_register_integration()
-{
-    require_once dirname(__FILE__) . '/integration/buddyboss-integration.php';
-    buddypress()->integrations['addon'] = new PHOTOCAT_BuddyBoss_Integration();
-}
-add_action('bp_setup_integrations', 'PHOTOCAT_register_integration');
-
-if (!function_exists('PHOTOCAT_f_log')) {
-    function PHOTOCAT_f_log($log_name, $str)
-    {
-        $log_file = $_SERVER['DOCUMENT_ROOT'] . "/logs/$log_name.log";
-        $fp = fopen($log_file, 'a');
-        fwrite($fp, "$str\n");
-        fclose($fp);
-    }
-}
+?>

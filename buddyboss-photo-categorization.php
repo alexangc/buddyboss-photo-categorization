@@ -123,7 +123,7 @@ if (!class_exists('PHOTOCAT_BB_Platform_Addon')) {
          */
         public function includes()
         {
-            include_once 'functions.php';
+            include_once 'includes/components.php';
         }
 
         /**
