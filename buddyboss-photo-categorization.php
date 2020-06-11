@@ -252,5 +252,15 @@ if (!class_exists('PHOTOCAT_BB_Platform_Addon')) {
         PHOTOCAT_BB_Platform_Addon();
     }
 
+    function PHOTOCAT_plugin_activate()
+    {
+        add_option('Activated_Plugin', 'buddyboss-photo-categorization');
+        require_once dirname(__FILE__) .
+            '/includes/bp-photo-cat-install-plugin/database.php';
+
+        PHOTOCAT_create_tables();
+    }
+
+    register_activation_hook(__FILE__, 'PHOTOCAT_plugin_activate');
     add_action('plugins_loaded', 'PHOTOCAT_BB_Platform_init', 9);
 }
