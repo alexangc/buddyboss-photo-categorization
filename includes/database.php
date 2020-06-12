@@ -1,12 +1,14 @@
 <?php
 require_once dirname(__FILE__) . '/functions.php';
 
-function PHOTOCAT_create_tables() {
-  global $wpdb;
-  $prefix = $wpdb->prefix;
+function PHOTOCAT_create_tables()
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
 
-  $tables['photo_categories'] =
-    "CREATE TABLE IF NOT EXISTS {$prefix}bp_photos_categories (
+    $tables[
+        'photo_categories'
+    ] = "CREATE TABLE IF NOT EXISTS {$prefix}bp_photos_categories (
     media_id      bigint(20) NOT NULL,
     user_id       bigint(20) unsigned NOT NULL,
     category_tag  varchar(50) NOT NULL DEFAULT '',
@@ -18,14 +20,25 @@ function PHOTOCAT_create_tables() {
     CONSTRAINT FK_user_id FOREIGN KEY (user_id) REFERENCES ebtiafsmz_users (ID)
   );";
 
-  try {
-    foreach ($tables as $query) {
-      $wpdb->query($query);
+    try {
+        foreach ($tables as $query) {
+            $wpdb->query($query);
+        }
+    } catch (Exception $e) {
+        $str = 'Exception caught : ' . $e->getMessage() . "\n";
+        PHOTOCAT_f_log('db-errors', $str);
     }
-  } catch (Exception $e) {
-      $str = 'Exception caught : ' .  $e->getMessage() . "\n";
-      PHOTOCAT_f_log('db-errors', $str);
-  }
 }
 
+function PHOTOCAT_insert_photo_categories($media_id, $tags)
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+    $user_id = bp_loggedin_user_id();
+
+    foreach ($tags as $tag) {
+        $query = "INSERT INTO {$prefix}bp_photos_categories (media_id, user_id, category_tag) VALUES ('$media_id', '$user_id', '$tag')";
+        $wpdb->query($query);
+    }
+}
 ?>
