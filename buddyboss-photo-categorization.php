@@ -256,7 +256,7 @@ if (!class_exists('PHOTOCAT_BB_Platform_Addon')) {
     {
         add_option('Activated_Plugin', 'buddyboss-photo-categorization');
         require_once dirname(__FILE__) .
-            '/includes/bp-photo-cat-install-plugin/database.php';
+            '/includes/database.php';
 
         PHOTOCAT_create_tables();
     }

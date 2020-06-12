@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__) . '/../functions.php';
+require_once dirname(__FILE__) . '/functions.php';
 
 function PHOTOCAT_create_tables() {
   global $wpdb;
@@ -27,4 +27,5 @@ function PHOTOCAT_create_tables() {
       PHOTOCAT_f_log('db-errors', $str);
   }
 }
+
 ?>
