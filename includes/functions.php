@@ -22,7 +22,6 @@ function PHOTOCAT_get_dir_relative_path($dir_name)
     );
 }
 
-//
 function PHOTOCAT_get_category_count()
 {
     return get_option('PHOTOCAT_cat_number', "0");
@@ -38,7 +37,12 @@ function PHOTOCAT_get_categories()
         $options = explode(";", get_option("PHOTOCAT_category_options_$i", ""));
 
         for ($j = 0; $j < count($options); $j++) {
-            $options[$j] = trim($options[$j]);
+            $opt = trim($options[$j]);
+            if ($opt != '') {
+                $options[$j] = $opt;
+            } else {
+                unset($options[$j]);
+            }
         }
 
         if ($label != "") {
