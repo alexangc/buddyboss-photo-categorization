@@ -20,7 +20,7 @@ function PHOTOCAT_on_photo_upload($params) {
 }
 
 function PHOTOCAT_tagify($string) {
-  // TODO
-  return $string;
+  $string = strtr(utf8_decode($string), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
+  return strtolower(preg_replace('/[^a-zA-Z0-9]+/','-', $string));
 }
 ?>
