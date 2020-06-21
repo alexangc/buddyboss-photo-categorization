@@ -41,4 +41,38 @@ function PHOTOCAT_insert_photo_categories($media_id, $tags)
         $wpdb->query($query);
     }
 }
+
+function PHOTOCAT_get_media_ids_with_categories($tags)
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+
+    $sql = "SELECT * FROM {$prefix}bp_photos_categories";
+
+    // [1] Fetch the `(media_id, category_tag)` assocs for each `$tags[i]`.
+    if (count($tags) > 0) {
+        $sql .= " WHERE category_tag IN (";
+        $lastId = count($tags) - 1;
+        for ($i = 0; $i < $lastId; $i++) {
+            $sql .= "'" . $tags[$i] . "', ";
+        }
+        $sql .= "'" . $tags[$lastId] . "')";
+    }
+    $lines = $wpdb->get_results($sql);
+
+    // [2] Aggregate all the categories around the `media_id` field.
+    $results = [];
+    foreach ($lines as $line) {
+        if ($results[$line->media_id]) {
+            $results[$line->media_id]->categories[] = $line->category_tag;
+        } else {
+            $results[$line->media_id] = (object) [
+                'categories' => [$line->category_tag],
+            ];
+        }
+    }
+
+    return $results;
+}
+
 ?>

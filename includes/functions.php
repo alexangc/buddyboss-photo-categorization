@@ -52,4 +52,10 @@ function PHOTOCAT_get_categories()
     }
     return $categories;
 }
+
+function PHOTOCAT_return_json($response = [])
+{
+    header('Content-type: application/json');
+    exit(json_encode($response));
+}
 ?>

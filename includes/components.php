@@ -33,8 +33,14 @@ function PHOTOCAT_register_integration()
     buddypress()->integrations['addon'] = new PHOTOCAT_BuddyBoss_Integration();
 }
 
+wp_enqueue_script(
+    'axios',
+    'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'
+);
+
 add_action('bp_setup_integrations', 'PHOTOCAT_register_integration');
 add_action('bp_media_add_handler', 'PHOTOCAT_on_photo_upload');
+add_action('wp_ajax_get_photos', 'PHOTOCAT_ajax_fetch_photos');
 
 add_filter('bp_get_template_part', 'PHOTOCAT_uploader_categories', 10, 3);
 
