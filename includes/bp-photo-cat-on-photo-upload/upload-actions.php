@@ -19,6 +19,11 @@ function PHOTOCAT_on_photo_upload($params)
     return $params;
 }
 
+function PHOTOCAT_on_photo_delete($params) {
+    PHOTOCAT_delete_saved_categories_for_medias($params);
+    return $params;
+}
+
 function PHOTOCAT_tagify($string)
 {
     $string = preg_replace('/œ/', 'oe', $string);

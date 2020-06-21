@@ -42,6 +42,25 @@ function PHOTOCAT_insert_photo_categories($media_id, $tags)
     }
 }
 
+function PHOTOCAT_delete_saved_categories_for_medias($params) {
+
+    if (!is_array($params) || !count($params) > 0) {
+        return;
+    }
+
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+    $last_id = count($params) - 1;
+
+    $sql = "DELETE FROM {$prefix}bp_photos_categories WHERE media_id IN (";
+    for ($i = 0; $i < $last_id; $i++) {
+        $sql.= "{$params[$i]->id}, ";
+    }
+    $sql.= " {$params[$last_id]->id})";
+
+    $wpdb->query($sql);
+}
+
 function PHOTOCAT_get_media_ids_with_categories($tags)
 {
     global $wpdb;
