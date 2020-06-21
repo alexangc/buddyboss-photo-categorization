@@ -2,9 +2,9 @@
   const $ = jQuery; // The '$' shortcut doesn't work by default in Wordpress
 
   function makeSelect(id, name, placeholder, options) {
-    let choices = `<option disabled selected> --- ${placeholder} --- </option>\n`;
-    options.forEach((option) => {
-      choices += `<option value="${option}">${option}</option>\n`;
+    let choices = `<option selected> --- ${placeholder} --- </option>\n`;
+    options.forEach((opt) => {
+      choices += `<option name="${opt}" value="${opt}">${opt}</option>\n`;
     });
 
     return `<span>
@@ -35,7 +35,7 @@
     const medias = bp.Nouveau.Media.dropzone_media;
     const categories = $(".PHOTOCAT_select")
       .toArray()
-      .filter((el) => $(el).val())
+      .filter((el) => $(el).find(':selected').attr('name'))
       .map((select) => ({
         label: $(select).attr("name"),
         value: $(select).val(),

@@ -42,8 +42,8 @@ function PHOTOCAT_insert_photo_categories($media_id, $tags)
     }
 }
 
-function PHOTOCAT_delete_saved_categories_for_medias($params) {
-
+function PHOTOCAT_delete_saved_categories_for_medias($params)
+{
     if (!is_array($params) || !count($params) > 0) {
         return;
     }
@@ -54,9 +54,9 @@ function PHOTOCAT_delete_saved_categories_for_medias($params) {
 
     $sql = "DELETE FROM {$prefix}bp_photos_categories WHERE media_id IN (";
     for ($i = 0; $i < $last_id; $i++) {
-        $sql.= "{$params[$i]->id}, ";
+        $sql .= "{$params[$i]->id}, ";
     }
-    $sql.= " {$params[$last_id]->id})";
+    $sql .= " {$params[$last_id]->id})";
 
     $wpdb->query($sql);
 }
