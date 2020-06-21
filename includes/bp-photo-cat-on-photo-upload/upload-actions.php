@@ -21,6 +21,7 @@ function PHOTOCAT_on_photo_upload($params)
 
 function PHOTOCAT_tagify($string)
 {
+    $string = preg_replace('/œ/', 'oe', $string);
     $string = strtr(
         utf8_decode($string),
         utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'),
