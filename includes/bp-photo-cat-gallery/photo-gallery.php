@@ -27,19 +27,21 @@ function PHOTOCAT_ajax_fetch_photos()
     // TODO: add pagination parameter for offset in query
     $data = json_decode(file_get_contents('php://input'), true);
     $categories = $data['categories'];
+    $limit = $data['limit'] ? $data['limit'] : 20;
+    $page = $data['page'] ? $data['page'] : 1;
 
     $tags = [];
     foreach ($categories as $cat) {
         $tags[] = PHOTOCAT_tagify(sanitize_text_field($cat));
     }
 
-    $medias_cat = PHOTOCAT_get_media_ids_with_categories($tags);
+    $fetched = PHOTOCAT_get_media_ids_for_categories($tags, $limit, $page);
     $media_ids = [];
-    foreach ($medias_cat as $media_id => $categories) {
-        $media_ids[] = $media_id;
+    foreach ($fetched->medias as $media) {
+        $media_ids[] = $media->media_id;
     }
 
-    $args = [
+    $bp_args = [
         'media_ids' => $media_ids,
         'max' => false,
         'count_total' => false,
@@ -51,8 +53,15 @@ function PHOTOCAT_ajax_fetch_photos()
         'album_id' => false,
     ];
 
-    $res['categories'] = $medias_cat;
-    $res['photos'] = (object) bp_media_get_specific($args);
+    $res['total_count'] = $fetched->count;
+    $res['offset'] = $limit * ($page - 1);
+    $res['limit'] = $limit;
+
+    $res['categories'] = $tags;
+    $res['photos'] =
+        count($media_ids) > 0
+            ? (object) bp_media_get_specific($bp_args)
+            : (object) ['medias' => []];
 
     // Filtering out non-mandatory or possibly sensitive data
     for ($i = 0; $i < count($res['photos']->medias); $i++) {
@@ -75,7 +84,6 @@ function PHOTOCAT_ajax_fetch_photos()
         $res['photos']->medias[$i] = $media;
     }
 
-    // PHOTOCAT_f_log('test', var_export($res['photos']->medias, true));
     PHOTOCAT_return_json($res);
 }
 ?>

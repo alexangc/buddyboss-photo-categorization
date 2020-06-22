@@ -61,14 +61,15 @@ function PHOTOCAT_delete_saved_categories_for_medias($params)
     $wpdb->query($sql);
 }
 
-function PHOTOCAT_get_media_ids_with_categories($tags)
+function PHOTOCAT_get_media_ids_for_categories($tags, $limit = 20, $page = 1)
 {
     global $wpdb;
     $prefix = $wpdb->prefix;
+    $tag_count = count($tags);
+    $offset = $limit * ($page - 1);
 
-    $sql = "SELECT * FROM {$prefix}bp_photos_categories";
+    $sql = "SELECT media_id FROM {$prefix}bp_photos_categories";
 
-    // [1] Fetch the `(media_id, category_tag)` assocs for each `$tags[i]`.
     if (count($tags) > 0) {
         $sql .= " WHERE category_tag IN (";
         $lastId = count($tags) - 1;
@@ -77,19 +78,17 @@ function PHOTOCAT_get_media_ids_with_categories($tags)
         }
         $sql .= "'" . $tags[$lastId] . "')";
     }
-    $lines = $wpdb->get_results($sql);
 
-    // [2] Aggregate all the categories around the `media_id` field.
-    $results = [];
-    foreach ($lines as $line) {
-        if ($results[$line->media_id]) {
-            $results[$line->media_id]->categories[] = $line->category_tag;
-        } else {
-            $results[$line->media_id] = (object) [
-                'categories' => [$line->category_tag],
-            ];
-        }
-    }
+    $sql .= " GROUP BY media_id HAVING COUNT(*) >= $tag_count";
+    $sql .= " ORDER BY media_id DESC";
+    $sql_count = "SELECT count(*) as count FROM ($sql) AS results";
+    $sql .= " LIMIT $limit OFFSET $offset";
+    $rows = $wpdb->get_results($sql);
+    $count = $wpdb->get_results($sql_count);
+
+    $results['count'] = $count[0]->count;
+    $results['medias'] = $rows;
+    $results = (object) $results;
 
     return $results;
 }
