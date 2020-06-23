@@ -6,6 +6,7 @@ require_once dirname(__FILE__) .
     '/bp-photo-cat-upload-categories/upload-categories.php';
 require_once dirname(__FILE__) .
     '/bp-photo-cat-on-photo-upload/upload-actions.php';
+require_once dirname(__FILE__) . '/bp-photo-cat-gallery/photo-gallery.php';
 
 /**
  * Central file importing the different components of the plugin.
@@ -32,7 +33,16 @@ function PHOTOCAT_register_integration()
     buddypress()->integrations['addon'] = new PHOTOCAT_BuddyBoss_Integration();
 }
 
+wp_enqueue_script(
+    'axios',
+    'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'
+);
+
 add_action('bp_setup_integrations', 'PHOTOCAT_register_integration');
 add_action('bp_media_add_handler', 'PHOTOCAT_on_photo_upload');
+add_filter('bp_media_before_delete', 'PHOTOCAT_on_photo_delete');
+add_action('wp_ajax_get_photos', 'PHOTOCAT_ajax_fetch_photos');
 
 add_filter('bp_get_template_part', 'PHOTOCAT_uploader_categories', 10, 3);
+
+add_shortcode('PHOTOCAT_gallery_shortcode', 'PHOTOCAT_gallery');
