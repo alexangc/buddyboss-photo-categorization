@@ -16,9 +16,36 @@ function PHOTOCAT_create_tables()
     PRIMARY KEY (media_id, user_id, category_tag),
     KEY FK_media_id (media_id),
     KEY FK_user_id (user_id),
-    CONSTRAINT FK_media_id FOREIGN KEY (media_id) REFERENCES ebtiafsmz_bp_media (id),
-    CONSTRAINT FK_user_id FOREIGN KEY (user_id) REFERENCES ebtiafsmz_users (ID)
+    CONSTRAINT FK_media_id FOREIGN KEY (media_id) REFERENCES {$prefix}bp_media (id),
+    CONSTRAINT FK_user_id FOREIGN KEY (user_id) REFERENCES {$prefix}users (ID)
   );";
+
+    $tables[
+        'photo_collections'
+    ] = "CREATE TABLE IF NOT EXISTS {$prefix}bp_photos_collections (
+        id BIGINT(20) NOT NULL AUTO_INCREMENT,
+        owner_id BIGINT(20) UNSIGNED NOT NULL,
+        title VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'latin1_swedish_ci',
+
+        PRIMARY KEY (id) USING BTREE,
+        KEY FK_user_id (owner_id) USING BTREE,
+        CONSTRAINT FK_owner_id FOREIGN KEY (owner_id) REFERENCES {$prefix}users (ID)
+    );";
+
+    $tables[
+        'photo_collections_items'
+    ] = "CREATE TABLE IF NOT EXISTS {$prefix}bp_photos_collections_items (
+        collection_id BIGINT(20) NOT NULL,
+        media_id      bigint(20) NOT NULL,
+
+        PRIMARY KEY (collection_id, media_id) USING BTREE,
+        KEY FK_collection_id (collection_id),
+        KEY FK_collection_media_id (media_id),
+        CONSTRAINT FK_collection_id FOREIGN KEY (collection_id)
+            REFERENCES {$prefix}bp_photos_collections (id),
+        CONSTRAINT FK_collection_media_id FOREIGN KEY (media_id)
+            REFERENCES {$prefix}bp_media (id)
+    );";
 
     try {
         foreach ($tables as $query) {
