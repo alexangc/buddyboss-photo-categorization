@@ -24,6 +24,7 @@
   background-color: #e3e3e3;
   width: 300px;
   height: 250px;
+  cursor: pointer;
 }
 .photocat-collections-parent {
   display: flex;
@@ -44,4 +45,10 @@
   text-align: center;
   font-size: 1.1rem;
   padding-top: 5%;
+  cursor:pointer;
+}
+
+/* Fixes elementor's global style */
+.slbElement button {
+  background-color: unset !important;
 }
