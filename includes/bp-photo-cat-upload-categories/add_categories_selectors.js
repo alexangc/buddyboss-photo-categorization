@@ -35,7 +35,7 @@
     const medias = bp.Nouveau.Media.dropzone_media;
     const categories = $(".PHOTOCAT_select")
       .toArray()
-      .filter((el) => $(el).find(':selected').attr('name'))
+      .filter((el) => $(el).find(":selected").attr("name"))
       .map((select) => ({
         label: $(select).attr("name"),
         value: $(select).val(),
