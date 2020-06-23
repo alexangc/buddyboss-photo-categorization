@@ -7,6 +7,8 @@ require_once dirname(__FILE__) .
 require_once dirname(__FILE__) .
     '/bp-photo-cat-on-photo-upload/upload-actions.php';
 require_once dirname(__FILE__) . '/bp-photo-cat-gallery/photo-gallery.php';
+require_once dirname(__FILE__) .
+    '/bp-photo-cat-collections/photo-collections.php';
 
 /**
  * Central file importing the different components of the plugin.
@@ -46,3 +48,4 @@ add_action('wp_ajax_get_photos', 'PHOTOCAT_ajax_fetch_photos');
 add_filter('bp_get_template_part', 'PHOTOCAT_uploader_categories', 10, 3);
 
 add_shortcode('PHOTOCAT_gallery_shortcode', 'PHOTOCAT_gallery');
+add_shortcode('PHOTOCAT_collections_shortcode', 'PHOTOCAT_collections');
