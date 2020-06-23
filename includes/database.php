@@ -120,4 +120,23 @@ function PHOTOCAT_get_media_ids_for_categories($tags, $limit = 20, $page = 1)
     return $results;
 }
 
+function PHOTOCAT_get_user_collections($user_id)
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+    $sql = "SELECT * FROM {$prefix}bp_photos_collections WHERE owner_id=$user_id";
+    return $wpdb->get_results($sql);
+}
+
+function PHOTOCAT_get_collection($collection_id, $limit = 2, $offset = 0)
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+    $sql = "SELECT * FROM {$prefix}bp_photos_collections_items
+    WHERE collection_id=$collection_id
+    ORDER BY media_id DESC
+    LIMIT $limit OFFSET $offset";
+    return $wpdb->get_results($sql);
+}
+
 ?>
