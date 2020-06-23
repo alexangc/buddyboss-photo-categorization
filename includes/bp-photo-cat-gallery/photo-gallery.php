@@ -24,7 +24,6 @@ function PHOTOCAT_gallery()
 
 function PHOTOCAT_ajax_fetch_photos()
 {
-    // TODO: add pagination parameter for offset in query
     $data = json_decode(file_get_contents('php://input'), true);
     $categories = $data['categories'];
     $limit = $data['limit'] ? $data['limit'] : 20;
@@ -65,23 +64,12 @@ function PHOTOCAT_ajax_fetch_photos()
 
     // Filtering out non-mandatory or possibly sensitive data
     for ($i = 0; $i < count($res['photos']->medias); $i++) {
-        $media = $res['photos']->medias[$i];
         if ($media->privacy != 'public') {
             continue;
         }
-        if (isset($media->attachment_data->meta['image_meta'])) {
-            unset($media->attachment_data->meta['image_meta']);
-        }
-
-        $media = [
-            'id' => $media->id,
-            'title' => $media->title,
-            'user_id' => $media->user_id,
-            'date_created' => $media->date_created,
-            'attachment_data' => $media->attachment_data,
-        ];
-
-        $res['photos']->medias[$i] = $media;
+        $res['photos']->medias[$i] = PHOTOCAT_filter_media_data(
+            $res['photos']->medias[$i]
+        );
     }
 
     PHOTOCAT_return_json($res);

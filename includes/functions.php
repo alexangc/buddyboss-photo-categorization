@@ -53,6 +53,23 @@ function PHOTOCAT_get_categories()
     return $categories;
 }
 
+function PHOTOCAT_filter_media_data($media)
+{
+    if (isset($media->attachment_data->meta['image_meta'])) {
+        unset($media->attachment_data->meta['image_meta']);
+    }
+
+    $media = [
+        'id' => $media->id,
+        'title' => $media->title,
+        'user_id' => $media->user_id,
+        'date_created' => $media->date_created,
+        'attachment_data' => $media->attachment_data,
+    ];
+
+    return $media;
+}
+
 function PHOTOCAT_return_json($response = [])
 {
     header('Content-type: application/json');
