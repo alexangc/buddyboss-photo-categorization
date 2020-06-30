@@ -64,7 +64,8 @@ function PHOTOCAT_ajax_fetch_photos()
 
     // Filtering out non-mandatory or possibly sensitive data
     for ($i = 0; $i < count($res['photos']->medias); $i++) {
-        if ($media->privacy != 'public') {
+        // Only using public photos
+        if ($res['photos']->medias[$i]->privacy != 'public') {
             continue;
         }
         $res['photos']->medias[$i] = PHOTOCAT_filter_media_data(
