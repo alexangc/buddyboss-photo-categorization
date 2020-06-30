@@ -228,6 +228,9 @@
     modal
       .find(".photocat-photo-frame")
       .css("background-image", `url(${media.attachment_data.thumb})`);
+    modal.find('.photocat-close-modal').click(() => {
+      modal.css("display", "none");
+    })
   }
 
   $(document).ready(refreshPhotos);

@@ -52,6 +52,7 @@
   <div class="dialogue_info">
     <div class="dialogue_title">
       <p>{__('Create My Collection', 'buddyboss-photo-categorization')}</p>
+      <span class="photocat-close-modal"></span>
     </div>
     <div width="100%"> <hr> </div>
     <textarea
