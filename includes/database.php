@@ -47,9 +47,7 @@ function PHOTOCAT_create_tables()
             REFERENCES {$prefix}bp_media (id)
     );";
 
-    $tables[
-        'photos_collections_items_categories'
-    ] = "CREATE TABLE IF NOT EXISTS
+    $tables['photos_collections_items_categories'] = "CREATE TABLE IF NOT EXISTS
             `{$prefix}bp_photos_collections_items_categories` (
         `collection_id` BIGINT(20)  NOT NULL,
         `media_id`      BIGINT(20)  NOT NULL,
@@ -152,6 +150,15 @@ function PHOTOCAT_get_collection($collection_id, $limit = 2, $offset = 0)
     WHERE collection_id=$collection_id
     ORDER BY media_id DESC
     LIMIT $limit OFFSET $offset";
+    return $wpdb->get_results($sql);
+}
+
+function PHOTOCAT_get_media_collection($media_id)
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+    $sql = "SELECT collection_id FROM {$prefix}bp_photos_collections_items
+    WHERE media_id=$media_id";
     return $wpdb->get_results($sql);
 }
 
