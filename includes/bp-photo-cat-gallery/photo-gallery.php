@@ -62,15 +62,24 @@ function PHOTOCAT_ajax_fetch_photos()
             ? (object) bp_media_get_specific($bp_args)
             : (object) ['medias' => []];
 
-    // Filtering out non-mandatory or possibly sensitive data
     for ($i = 0; $i < count($res['photos']->medias); $i++) {
         // Only using public photos
         if ($res['photos']->medias[$i]->privacy != 'public') {
             continue;
         }
+        // Filtering out non-mandatory or possibly sensitive data
         $res['photos']->medias[$i] = PHOTOCAT_filter_media_data(
             $res['photos']->medias[$i]
         );
+        // Fetching any existing collection entry for that
+        // (user_id, media_id) pair
+        $collection = PHOTOCAT_get_media_collection(
+            $res['photos']->medias[$i]['id']
+        );
+        if (is_array($collection) && count($collection) > 0) {
+            $res['photos']->medias[$i]['collection'] =
+                $collection[0]->collection_id;
+        }
     }
 
     PHOTOCAT_return_json($res);
