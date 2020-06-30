@@ -107,7 +107,6 @@
 }
 
 /* Save collection button */
-.enregister, /* TODO delete enregister */
 .save_button
  {
   height: 30px;
@@ -120,8 +119,82 @@
   align-items: center;
 }
 
+/* ======================= Photo saving pop-up ======================== */
 
-.photo-img {    /* TODO delete */
-  width: 100%;
-  height: auto;
+.drop_down_menu {
+  background: #ffffff;
+  width: 168px;
+  height: 30px;
+  margin-top: 389px;
+  margin-left: 6px;
+  padding-left: 0px;
+
+}
+
+.drop_down_menu li {
+  font-size: 18px;
+}
+
+.dialogue {
+  width: 825px;
+  height: 450px;
+  background: #ffffff;
+  display: none;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  box-shadow: 5px 10px 8px rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 611; /* Required to go over BuddyBoss's user profile's header */
+}
+
+.dialogue_info {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+.dialogue_title > p {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.dialogue_title {
+  font-size: 2.9rem;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.dialogue_button {
+  width: 125px;
+  height: 40px;
+  margin-left: auto;
+  background-color: #035c26;
+  outline: 0;
+  border: 0;
+  color: #fff;
+  margin-top: 20px;
+  font-weight: bold;
+  border-radius: unset;
+}
+
+.dialogue_textarea {
+  background-color: #f2f2f2;
+  width: 540px;
+  resize: none;
+  border: 0;
+  font-size: 20px;
+  align-content: center;
+  padding-top: 13px;
+  height: 50px;
+  padding-left: 20px;
+}
+
+.dialogue_textarea:placeholder {
+  color: #acacac;
 }
