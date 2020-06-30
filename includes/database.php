@@ -47,6 +47,22 @@ function PHOTOCAT_create_tables()
             REFERENCES {$prefix}bp_media (id)
     );";
 
+    $tables[
+        'photos_collections_items_categories'
+    ] = "CREATE TABLE IF NOT EXISTS
+            `{$prefix}bp_photos_collections_items_categories` (
+        `collection_id` BIGINT(20)  NOT NULL,
+        `media_id`      BIGINT(20)  NOT NULL,
+        `category_tag`  VARCHAR(50) NOT NULL DEFAULT '',
+        PRIMARY KEY (`collection_id`, `media_id`, `category_tag`),
+        INDEX `FK_COLL_ITEM_collection_id` (`collection_id`),
+        INDEX `FK_COLL_ITEM_media_id` (`media_id`),
+        CONSTRAINT `FK_COLL_ITEM_collection_id` FOREIGN KEY (`collection_id`)
+            REFERENCES `{$prefix}bp_photos_collections` (`id`),
+        CONSTRAINT `FK_COLL_ITEM_media_id` FOREIGN KEY (`media_id`)
+            REFERENCES `{$prefix}bp_media` (`id`)
+    )";
+
     try {
         foreach ($tables as $query) {
             $wpdb->query($query);
