@@ -24,6 +24,7 @@ function PHOTOCAT_gallery()
 
 function PHOTOCAT_ajax_fetch_photos()
 {
+    $user_id = bp_loggedin_user_id();
     $data = json_decode(file_get_contents('php://input'), true);
     $categories = $data['categories'];
     $limit = $data['limit'] ? $data['limit'] : 20;
@@ -74,7 +75,8 @@ function PHOTOCAT_ajax_fetch_photos()
         // Fetching any existing collection entry for that
         // (user_id, media_id) pair
         $collection = PHOTOCAT_get_media_collection(
-            $res['photos']->medias[$i]['id']
+            $res['photos']->medias[$i]['id'],
+            $user_id
         );
         if (is_array($collection) && count($collection) > 0) {
             $res['photos']->medias[$i]['collection'] =

@@ -153,12 +153,19 @@ function PHOTOCAT_get_collection($collection_id, $limit = 2, $offset = 0)
     return $wpdb->get_results($sql);
 }
 
-function PHOTOCAT_get_media_collection($media_id)
+function PHOTOCAT_get_media_collection($media_id, $user_id)
 {
     global $wpdb;
     $prefix = $wpdb->prefix;
-    $sql = "SELECT collection_id FROM {$prefix}bp_photos_collections_items
-    WHERE media_id=$media_id";
+    $sql =
+    "SELECT collection_id
+    FROM {$prefix}bp_photos_collections_items AS Items,
+         {$prefix}bp_photos_collections AS Collections
+    WHERE Items.media_id=$media_id
+    AND   Items.collection_id=Collections.id
+    AND   Collections.owner_id=$user_id
+    ";
+
     return $wpdb->get_results($sql);
 }
 
