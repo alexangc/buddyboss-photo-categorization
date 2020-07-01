@@ -23,6 +23,8 @@ function PHOTOCAT_on_photo_delete($params)
 {
     PHOTOCAT_delete_saved_categories_for_medias($params);
     PHOTOCAT_delete_collection_associations_for_medias($params);
+    // TODO optimize cleanup
+    PHOTOCAT_delete_empty_collections();
     return $params;
 }
 

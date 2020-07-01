@@ -122,6 +122,21 @@ function PHOTOCAT_delete_collection_associations_for_medias($params)
     return $wpdb->query($sql);
 }
 
+function PHOTOCAT_delete_empty_collections()
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+
+    $sql = "DELETE FROM {$prefix}bp_photos_collections
+    WHERE NOT EXISTS (
+        SELECT collection_id
+        FROM {$prefix}bp_photos_collections_items as I
+        WHERE id=I.collection_id
+    )";
+
+    return $wpdb->query($sql);
+}
+
 function PHOTOCAT_get_media_ids_for_categories($tags, $limit = 20, $page = 1)
 {
     global $wpdb;
