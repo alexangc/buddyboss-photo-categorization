@@ -76,8 +76,10 @@ function PHOTOCAT_insert_photo_categories($media_id, $tags)
     global $wpdb;
     $prefix = $wpdb->prefix;
     $user_id = bp_loggedin_user_id();
+    $media_id = intval($media_id);
 
     foreach ($tags as $tag) {
+        $tag = sanitize_text_field($tag);
         $query = "INSERT INTO {$prefix}bp_photos_categories (media_id, user_id, category_tag) VALUES ('$media_id', '$user_id', '$tag')";
         $wpdb->query($query);
     }
@@ -95,8 +97,10 @@ function PHOTOCAT_delete_saved_categories_for_medias($params)
 
     $sql = "DELETE FROM {$prefix}bp_photos_categories WHERE media_id IN (";
     for ($i = 0; $i < $last_id; $i++) {
+        $params[$i]->id = intval($params[$i]->id);
         $sql .= "{$params[$i]->id}, ";
     }
+    $params[$last_id]->id = intval($params[$last_id]->id);
     $sql .= " {$params[$last_id]->id})";
 
     $wpdb->query($sql);
@@ -115,8 +119,10 @@ function PHOTOCAT_delete_collection_associations_for_medias($params)
     $sql = "DELETE FROM {$prefix}bp_photos_collections_items
             WHERE media_id IN (";
     for ($i = 0; $i < $last_id; $i++) {
+        $params[$i]->id = intval($params[$i]->id);
         $sql .= "{$params[$i]->id}, ";
     }
+    $params[$last_id]->id = intval($params[$last_id]->id);
     $sql .= " {$params[$last_id]->id})";
 
     return $wpdb->query($sql);
@@ -141,6 +147,8 @@ function PHOTOCAT_get_media_ids_for_categories($tags, $limit = 20, $page = 1)
 {
     global $wpdb;
     $prefix = $wpdb->prefix;
+    $limit = intval($limit);
+    $page = intval($page);
     $tag_count = count($tags);
     $offset = $limit * ($page - 1);
 
@@ -150,9 +158,9 @@ function PHOTOCAT_get_media_ids_for_categories($tags, $limit = 20, $page = 1)
         $sql .= " WHERE category_tag IN (";
         $lastId = count($tags) - 1;
         for ($i = 0; $i < $lastId; $i++) {
-            $sql .= "'" . $tags[$i] . "', ";
+            $sql .= "'" . sanitize_text_field($tags[$i]) . "', ";
         }
-        $sql .= "'" . $tags[$lastId] . "')";
+        $sql .= "'" . sanitize_text_field($tags[$lastId]) . "')";
     }
 
     $sql .= " GROUP BY media_id HAVING COUNT(*) >= $tag_count";
@@ -173,6 +181,7 @@ function PHOTOCAT_get_user_collections($user_id)
 {
     global $wpdb;
     $prefix = $wpdb->prefix;
+    $user_id = intval($user_id);
     $sql = "SELECT * FROM {$prefix}bp_photos_collections WHERE owner_id=$user_id";
     return $wpdb->get_results($sql);
 }
@@ -181,6 +190,10 @@ function PHOTOCAT_get_collection($collection_id, $limit = 2, $offset = 0)
 {
     global $wpdb;
     $prefix = $wpdb->prefix;
+    $collection_id = intval($collection_id);
+    $limit = intval($limit);
+    $offset = intval($offset);
+
     $sql = "SELECT * FROM {$prefix}bp_photos_collections_items
     WHERE collection_id=$collection_id
     ORDER BY media_id DESC
@@ -192,6 +205,9 @@ function PHOTOCAT_get_media_collection($media_id, $user_id)
 {
     global $wpdb;
     $prefix = $wpdb->prefix;
+    $media_id = intval($media_id);
+    $user_id = intval($user_id);
+
     $sql = "SELECT collection_id
     FROM {$prefix}bp_photos_collections_items AS Items,
          {$prefix}bp_photos_collections AS Collections
