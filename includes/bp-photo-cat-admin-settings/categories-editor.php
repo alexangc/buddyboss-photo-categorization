@@ -4,6 +4,11 @@ defined('ABSPATH') || exit();
 if (!function_exists('PHOTOCAT_get_settings_sections')) {
     function PHOTOCAT_get_settings_sections()
     {
+        $js = PHOTOCAT_get_dir_relative_path(
+            dirname(__FILE__) . '/categories-editor.js'
+        );
+        wp_enqueue_script('photo-gallery', $js);
+
         $settings = [
             'PHOTOCAT_settings_section' => [
                 'page' => 'addon',
@@ -110,6 +115,7 @@ if (!function_exists('PHOTOCAT_settings_callback_categories')) {
         <input
           id='<?= $id ?>'
           name='<?= $name ?>'
+          class='photo-cat-option-labels'
           placeholder='<?= __(
               'Category name',
               'buddyboss-photo-categorization'
@@ -131,6 +137,7 @@ if (!function_exists('PHOTOCAT_settings_callback_category_options')) {
         <input
             id='<?= $id ?>'
             name='<?= $name ?>'
+            class='photo-cat-option-values'
             placeholder='option1; option2; ...'
             type='text'
             size='40'
