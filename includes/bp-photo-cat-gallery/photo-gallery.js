@@ -179,7 +179,7 @@
 
     const data = {
       media_id: media.id,
-      collecton_id: collection.id,
+      collection_id: collection.id,
     };
 
     axios
