@@ -46,7 +46,8 @@
     // TODO: better display or configuration
     // TODO: translation system ?
     if (categories.length === 0) {
-      alert("You must select at least one category for this upload !");
+      // alert("You must select at least one category for this upload !");
+      alert("Vous devez sélectionner une catégorie au moins !");
       event.stopImmediatePropagation();
     }
   }
