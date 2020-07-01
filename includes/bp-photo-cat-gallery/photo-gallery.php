@@ -86,4 +86,20 @@ function PHOTOCAT_ajax_fetch_photos()
 
     PHOTOCAT_return_json($res);
 }
+
+function PHOTOCAT_ajax_save_photo_to_collection()
+{
+    $user_id = bp_loggedin_user_id();
+    $data = json_decode(file_get_contents('php://input'), true);
+    $media_id = $data['media_id'];
+    $collection_id = $data['collection_id'];
+
+    $rows = PHOTOCAT_save_photo_to_collection(
+        $user_id,
+        $collection_id,
+        $media_id
+    );
+
+    PHOTOCAT_return_json(['done' => $rows]);
+}
 ?>

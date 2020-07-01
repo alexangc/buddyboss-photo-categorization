@@ -157,8 +157,7 @@ function PHOTOCAT_get_media_collection($media_id, $user_id)
 {
     global $wpdb;
     $prefix = $wpdb->prefix;
-    $sql =
-    "SELECT collection_id
+    $sql = "SELECT collection_id
     FROM {$prefix}bp_photos_collections_items AS Items,
          {$prefix}bp_photos_collections AS Collections
     WHERE Items.media_id=$media_id
@@ -169,4 +168,27 @@ function PHOTOCAT_get_media_collection($media_id, $user_id)
     return $wpdb->get_results($sql);
 }
 
+function PHOTOCAT_save_photo_to_collection($user_id, $collection_id, $media_id)
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+    $res = false;
+
+    $user_id = intval($user_id);
+    $collection_id = intval($collection_id);
+    $media_id = intval($media_id);
+
+    $sql = "SELECT id
+    FROM {$prefix}bp_photos_collections
+    WHERE owner_id=$user_id";
+
+    $rows = $wpdb->get_results($sql);
+
+    if (is_array($rows) && count($rows) > 0) {
+        $sql = "INSERT INTO {$prefix}bp_photos_collections_items
+        (collection_id, media_id) VALUES ($collection_id, $media_id)";
+        $res = $wpdb->query($sql);
+    }
+    return $res;
+}
 ?>

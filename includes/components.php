@@ -49,6 +49,7 @@ add_action(
     'wp_ajax_get_self_collections',
     'PHOTOCAT_ajax_fetch_self_collections'
 );
+add_action('wp_ajax_save_photo', 'PHOTOCAT_ajax_save_photo_to_collection');
 
 add_filter('bp_get_template_part', 'PHOTOCAT_uploader_categories', 10, 3);
 
