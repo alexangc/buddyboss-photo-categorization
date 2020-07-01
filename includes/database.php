@@ -191,4 +191,34 @@ function PHOTOCAT_save_photo_to_collection($user_id, $collection_id, $media_id)
     }
     return $res;
 }
+
+function PHOTOCAT_collection_title_exists_for_user($user_id, $collection_title)
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+    $user_id = intval($user_id);
+    $collection_title = sanitize_text_field($collection_title);
+
+    $sql = "SELECT id
+    FROM {$prefix}bp_photos_collections
+    WHERE title='$collection_title' AND owner_id=$user_id";
+
+    $rows = $wpdb->get_results($sql);
+    return is_array($rows) && count($rows) > 0;
+}
+
+function PHOTOCAT_create_collection($user_id, $title)
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+
+    $user_id = intval($user_id);
+    $title = sanitize_text_field($title);
+
+    $data = ['owner_id' => $user_id, 'title' => $title];
+    $format = ['%d', '%s'];
+    $wpdb->insert("{$prefix}bp_photos_collections", $data, $format);
+
+    return $wpdb->insert_id;
+}
 ?>

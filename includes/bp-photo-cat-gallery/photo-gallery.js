@@ -213,6 +213,8 @@
       })
       .then((response) => {
         if (response.data && response.data.done) {
+          const frame = $(`.photocat-photo-frame[data-media-id=${media.id}]`);
+          tagPhotoWithCollection(frame, { title });
           closeCreateCollectionModal();
           getCurrentUserCollections().then((response) => {
             state.user.collections = response.data;

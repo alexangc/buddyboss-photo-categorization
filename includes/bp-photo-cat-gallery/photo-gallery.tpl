@@ -55,11 +55,10 @@
       <span class="photocat-close-modal"></span>
     </div>
     <div width="100%"> <hr> </div>
-    <textarea
+    <input type="text"
       class="dialogue-textarea"
       placeholder="{__('Collection name', 'buddyboss-photo-categorization')}"
     >
-    </textarea>
     <button class="dialogue-button">
       {__('Create', 'buddyboss-photo-categorization')}
     </button>

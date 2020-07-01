@@ -50,6 +50,10 @@ add_action(
     'PHOTOCAT_ajax_fetch_self_collections'
 );
 add_action('wp_ajax_save_photo', 'PHOTOCAT_ajax_save_photo_to_collection');
+add_action(
+    'wp_ajax_create_collection_with_photo',
+    'PHOTOCAT_ajax_create_collection_with_photo'
+);
 
 add_filter('bp_get_template_part', 'PHOTOCAT_uploader_categories', 10, 3);
 
