@@ -12,6 +12,10 @@
     },
   };
 
+  function showError(error) {
+    alert(error);
+  }
+
   function getPhotoFrameTemplate() {
     const tpl = $("#photo-box-template")[0].content.querySelector("div");
     return document.importNode(tpl, true);
@@ -131,6 +135,7 @@
         }
 
         // else
+        select.html(`<option class='dash-default'> - </option>`);
         const createCollection = document.importNode(
           $(
             "#photo-box-template-create-collection-option"
@@ -142,6 +147,7 @@
           const defaultOption = $(select).find(".dash-default");
           $(defaultOption).attr("selected", true);
         });
+
         select.append(createCollection);
 
         const sizeLimit = 30;
@@ -194,6 +200,31 @@
       });
   }
 
+  function createCollectionWithInitialMedia(title, media) {
+    const data = {
+      collection_title: title,
+      media_id: media.id,
+    };
+
+    axios
+      .post("/wp-admin/admin-ajax.php?action=create_collection_with_photo", {
+        action: "create_collection_with_photo",
+        ...data,
+      })
+      .then((response) => {
+        if (response.data && response.data.done) {
+          closeCreateCollectionModal();
+          getCurrentUserCollections().then((response) => {
+            state.user.collections = response.data;
+            populateCollectionSelectors(state.medias, state.user.collections);
+            addSaveTriggers();
+          });
+        } else if (response.data && response.data.error) {
+          showError(response.data.error);
+        }
+      });
+  }
+
   function addSaveTriggers() {
     $(".photocat-bottom-panel .save-button").click(savePhotoInCollection);
   }
@@ -224,13 +255,22 @@
     const id = parseInt(mediaId);
     const media = state.medias.find((media) => media.id == id);
 
+    modal.find(".dialogue-button").click(() => {
+      const title = $.trim(modal.find(".dialogue-textarea").val());
+      createCollectionWithInitialMedia(title, media);
+    });
+
     modal.css("display", "flex");
     modal
       .find(".photocat-photo-frame")
       .css("background-image", `url(${media.attachment_data.thumb})`);
-    modal.find('.photocat-close-modal').click(() => {
-      modal.css("display", "none");
-    })
+    modal.find(".photocat-close-modal").click(closeCreateCollectionModal);
+  }
+
+  function closeCreateCollectionModal() {
+    const modal = $("#create-collection-modal");
+    modal.css("display", "none");
+    modal.find(".dialogue-button").unbind();
   }
 
   $(document).ready(refreshPhotos);
