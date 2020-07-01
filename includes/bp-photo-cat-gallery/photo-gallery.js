@@ -110,7 +110,7 @@
     $(selector).removeClass("selector");
     $(selector).addClass("selector-tagged");
 
-    $(frame).find(".save_button").css("display", "none");
+    $(frame).find(".save-button").css("display", "none");
   }
 
   function populateCollectionSelectors(medias, collections) {
@@ -195,7 +195,7 @@
   }
 
   function addSaveTriggers() {
-    $(".photocat-bottom-panel .save_button").click(savePhotoInCollection);
+    $(".photocat-bottom-panel .save-button").click(savePhotoInCollection);
   }
 
   function goToPage(page) {

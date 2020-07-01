@@ -33,7 +33,7 @@
           <option class='dash-default'> - </option>
         </select>
       </div>
-      <button class="save_button">
+      <button class="save-button">
         {__('Save', 'buddyboss-photo-categorization')}
       </button>
     </div>
@@ -49,18 +49,18 @@
 <div id="create-collection-modal" class="dialogue">
   <div class='photocat-photo-frame'>
   </div>
-  <div class="dialogue_info">
-    <div class="dialogue_title">
+  <div class="dialogue-info">
+    <div class="dialogue-title">
       <p>{__('Create My Collection', 'buddyboss-photo-categorization')}</p>
       <span class="photocat-close-modal"></span>
     </div>
     <div width="100%"> <hr> </div>
     <textarea
-      class="dialogue_textarea"
+      class="dialogue-textarea"
       placeholder="{__('Collection name', 'buddyboss-photo-categorization')}"
     >
     </textarea>
-    <button class="dialogue_button">
+    <button class="dialogue-button">
       {__('Create', 'buddyboss-photo-categorization')}
     </button>
   </div>
