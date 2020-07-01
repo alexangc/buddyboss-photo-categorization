@@ -47,6 +47,20 @@ function PHOTOCAT_create_tables()
             REFERENCES {$prefix}bp_media (id)
     );";
 
+    $tables['photos_collections_items_categories'] = "CREATE TABLE IF NOT EXISTS
+            `{$prefix}bp_photos_collections_items_categories` (
+        `collection_id` BIGINT(20)  NOT NULL,
+        `media_id`      BIGINT(20)  NOT NULL,
+        `category_tag`  VARCHAR(50) NOT NULL DEFAULT '',
+        PRIMARY KEY (`collection_id`, `media_id`, `category_tag`),
+        INDEX `FK_COLL_ITEM_collection_id` (`collection_id`),
+        INDEX `FK_COLL_ITEM_media_id` (`media_id`),
+        CONSTRAINT `FK_COLL_ITEM_collection_id` FOREIGN KEY (`collection_id`)
+            REFERENCES `{$prefix}bp_photos_collections` (`id`),
+        CONSTRAINT `FK_COLL_ITEM_media_id` FOREIGN KEY (`media_id`)
+            REFERENCES `{$prefix}bp_media` (`id`)
+    )";
+
     try {
         foreach ($tables as $query) {
             $wpdb->query($query);
@@ -86,6 +100,41 @@ function PHOTOCAT_delete_saved_categories_for_medias($params)
     $sql .= " {$params[$last_id]->id})";
 
     $wpdb->query($sql);
+}
+
+function PHOTOCAT_delete_collection_associations_for_medias($params)
+{
+    if (!is_array($params) || !count($params) > 0) {
+        return;
+    }
+
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+    $last_id = count($params) - 1;
+
+    $sql = "DELETE FROM {$prefix}bp_photos_collections_items
+            WHERE media_id IN (";
+    for ($i = 0; $i < $last_id; $i++) {
+        $sql .= "{$params[$i]->id}, ";
+    }
+    $sql .= " {$params[$last_id]->id})";
+
+    return $wpdb->query($sql);
+}
+
+function PHOTOCAT_delete_empty_collections()
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+
+    $sql = "DELETE FROM {$prefix}bp_photos_collections
+    WHERE NOT EXISTS (
+        SELECT collection_id
+        FROM {$prefix}bp_photos_collections_items as I
+        WHERE id=I.collection_id
+    )";
+
+    return $wpdb->query($sql);
 }
 
 function PHOTOCAT_get_media_ids_for_categories($tags, $limit = 20, $page = 1)
@@ -139,4 +188,72 @@ function PHOTOCAT_get_collection($collection_id, $limit = 2, $offset = 0)
     return $wpdb->get_results($sql);
 }
 
+function PHOTOCAT_get_media_collection($media_id, $user_id)
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+    $sql = "SELECT collection_id
+    FROM {$prefix}bp_photos_collections_items AS Items,
+         {$prefix}bp_photos_collections AS Collections
+    WHERE Items.media_id=$media_id
+    AND   Items.collection_id=Collections.id
+    AND   Collections.owner_id=$user_id
+    ";
+
+    return $wpdb->get_results($sql);
+}
+
+function PHOTOCAT_save_photo_to_collection($user_id, $collection_id, $media_id)
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+    $res = false;
+
+    $user_id = intval($user_id);
+    $collection_id = intval($collection_id);
+    $media_id = intval($media_id);
+
+    $sql = "SELECT id
+    FROM {$prefix}bp_photos_collections
+    WHERE owner_id=$user_id";
+
+    $rows = $wpdb->get_results($sql);
+
+    if (is_array($rows) && count($rows) > 0) {
+        $sql = "INSERT INTO {$prefix}bp_photos_collections_items
+        (collection_id, media_id) VALUES ($collection_id, $media_id)";
+        $res = $wpdb->query($sql);
+    }
+    return $res;
+}
+
+function PHOTOCAT_collection_title_exists_for_user($user_id, $collection_title)
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+    $user_id = intval($user_id);
+    $collection_title = sanitize_text_field($collection_title);
+
+    $sql = "SELECT id
+    FROM {$prefix}bp_photos_collections
+    WHERE title='$collection_title' AND owner_id=$user_id";
+
+    $rows = $wpdb->get_results($sql);
+    return is_array($rows) && count($rows) > 0;
+}
+
+function PHOTOCAT_create_collection($user_id, $title)
+{
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+
+    $user_id = intval($user_id);
+    $title = sanitize_text_field($title);
+
+    $data = ['owner_id' => $user_id, 'title' => $title];
+    $format = ['%d', '%s'];
+    $wpdb->insert("{$prefix}bp_photos_collections", $data, $format);
+
+    return $wpdb->insert_id;
+}
 ?>

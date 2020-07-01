@@ -108,4 +108,10 @@ function PHOTOCAT_ajax_fetch_collection()
     PHOTOCAT_return_json($collection);
 }
 
+function PHOTOCAT_ajax_fetch_self_collections()
+{
+    $user_id = bp_loggedin_user_id();
+    PHOTOCAT_return_json(PHOTOCAT_get_user_collections($user_id));
+}
+
 ?>

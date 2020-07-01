@@ -24,6 +24,7 @@ function PHOTOCAT_gallery()
 
 function PHOTOCAT_ajax_fetch_photos()
 {
+    $user_id = bp_loggedin_user_id();
     $data = json_decode(file_get_contents('php://input'), true);
     $categories = $data['categories'];
     $limit = $data['limit'] ? $data['limit'] : 20;
@@ -62,14 +63,87 @@ function PHOTOCAT_ajax_fetch_photos()
             ? (object) bp_media_get_specific($bp_args)
             : (object) ['medias' => []];
 
-    // Filtering out non-mandatory or possibly sensitive data
     for ($i = 0; $i < count($res['photos']->medias); $i++) {
-        if ($media->privacy != 'public') {
+        // Only using public photos
+        if ($res['photos']->medias[$i]->privacy != 'public') {
             continue;
         }
+        // Filtering out non-mandatory or possibly sensitive data
         $res['photos']->medias[$i] = PHOTOCAT_filter_media_data(
             $res['photos']->medias[$i]
         );
+        // Fetching any existing collection entry for that
+        // (user_id, media_id) pair
+        $collection = PHOTOCAT_get_media_collection(
+            $res['photos']->medias[$i]['id'],
+            $user_id
+        );
+        if (is_array($collection) && count($collection) > 0) {
+            $res['photos']->medias[$i]['collection'] =
+                $collection[0]->collection_id;
+        }
+    }
+
+    PHOTOCAT_return_json($res);
+}
+
+function PHOTOCAT_ajax_save_photo_to_collection()
+{
+    $user_id = bp_loggedin_user_id();
+    $data = json_decode(file_get_contents('php://input'), true);
+    $media_id = $data['media_id'];
+    $collection_id = $data['collection_id'];
+
+    $rows = PHOTOCAT_save_photo_to_collection(
+        $user_id,
+        $collection_id,
+        $media_id
+    );
+
+    PHOTOCAT_return_json(['done' => $rows]);
+}
+
+function PHOTOCAT_ajax_create_collection_with_photo()
+{
+    $user_id = bp_loggedin_user_id();
+    $data = json_decode(file_get_contents('php://input'), true);
+    $title = $data['collection_title'];
+    $media_id = $data['media_id'];
+    $res = (object) [];
+    if ($title == '') {
+        $res->error = __(
+            'You must enter a title for the new collection.',
+            'buddyboss-photo-categorization'
+        );
+    } elseif (strlen($title) > 30) {
+        $res->error = __(
+            'The new collection\'s title cannot be longer than 30 characters.',
+            'buddyboss-photo-categorization'
+        );
+    } elseif (PHOTOCAT_collection_title_exists_for_user($user_id, $title)) {
+        $res->error = __(
+            'A collection with this title already exists.',
+            'buddyboss-photo-categorization'
+        );
+    } elseif (
+        !($new_collection = PHOTOCAT_create_collection($user_id, $title))
+    ) {
+        $res->error = __(
+            'Failed creating the new collection.',
+            'buddyboss-photo-categorization'
+        );
+    } else {
+        $res->done = PHOTOCAT_save_photo_to_collection(
+            $user_id,
+            $new_collection,
+            $media_id
+        );
+        if (!$res->done) {
+            $res->error = __(
+                'Failed adding the media to the new collection.',
+                'buddyboss-photo-categorization'
+            );
+        }
     }
 
     PHOTOCAT_return_json($res);

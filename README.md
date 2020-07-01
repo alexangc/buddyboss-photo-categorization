@@ -15,5 +15,5 @@ The intent is to emulate a simple version of Pinterest collections.
 - [x] Categories selectors on photo upload, integrated in BuddyBoss.
 - [x] Categories editor, in BuddyBoss's admin panel.
 - [x] Default photo browsing, with category filters *(Wordpress short-code)*.
-- [ ] Pinterest-like `'Save picture'` widget, on the photo display page.
+- [x] Pinterest-like `'Save picture'` widget, on the photo display page.
 - [x] Default photo collections display page *(Wordpress short-code)*.

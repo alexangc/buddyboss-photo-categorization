@@ -29,9 +29,38 @@
   <div class='photocat-photo-frame'>
     <div class="photocat-bottom-panel">
       <div class="selector">
-        <!-- TODO -->
+        <select class="selector">
+          <option class='dash-default'> - </option>
+        </select>
       </div>
-      <button class="save_button">{__('Save', 'buddyboss-photo-categorization')}</button>
+      <button class="save-button">
+        {__('Save', 'buddyboss-photo-categorization')}
+      </button>
     </div>
   </div>
 </template>
+
+<template id='photo-box-template-create-collection-option'>
+  <option>
+    + {__('Create collection', 'buddyboss-photo-categorization')}
+  </option>
+</template>
+
+<div id="create-collection-modal" class="dialogue">
+  <div class='photocat-photo-frame'>
+  </div>
+  <div class="dialogue-info">
+    <div class="dialogue-title">
+      <p>{__('Create My Collection', 'buddyboss-photo-categorization')}</p>
+      <span class="photocat-close-modal"></span>
+    </div>
+    <div width="100%"> <hr> </div>
+    <input type="text"
+      class="dialogue-textarea"
+      placeholder="{__('Collection name', 'buddyboss-photo-categorization')}"
+    >
+    <button class="dialogue-button">
+      {__('Create', 'buddyboss-photo-categorization')}
+    </button>
+  </div>
+</div>
