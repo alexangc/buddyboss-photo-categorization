@@ -1,0 +1,105 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-01 12:15+0200\n"
+"PO-Revision-Date: 2020-07-01 12:23+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Eazy Po 0.9.5.3\n"
+
+#: buddyboss-photo-categorization.php:61 buddyboss-photo-categorization.php:73
+msgid "Cheatin&#8217; huh?"
+msgstr "On essaye de tricher, hein ?"
+
+#: buddyboss-photo-categorization.php:199
+msgid ""
+"<strong>BuddyBoss - Photo Categorization</strong></a> requires the BuddyBoss "
+"Platform plugin to work. Please <a href=\"https://buddyboss.com/platform/\" "
+"target=\"_blank\">install BuddyBoss Platform</a> first."
+msgstr ""
+"<strong>BuddyBoss - Photo Categorization</strong></a> a besoin du plugin "
+"BuddyBoss Platform pour fonctionner. Veuillez <a href=\"https://buddyboss."
+"com/plat e322\"\"£form/\" target=\"_blank\">installer BuddyBoss Platform</a> "
+"first.é"
+
+#: buddyboss-photo-categorization.php:209
+msgid ""
+"<strong>BuddyBoss - Photo Categorization</strong></a> requires BuddyBoss "
+"Platform plugin version 1.2.6 or higher to work. Please update BuddyBoss "
+"Platform."
+msgstr ""
+"<strong>BuddyBoss - Photo Categorization</strong></a> a besoin du plugin "
+"BuddyBoss Platform version 1.2.6 ou postérieur pour fonctionner. Veuillez "
+"mettre BuddyBoss Platform à jour."
+
+#: includes/bp-photo-cat-admin-settings/categories-editor.php:16
+#: includes/bp-photo-cat-integration/buddyboss-integration.php:22
+msgid "Photo Categorization"
+msgstr "Catégorisation des photos"
+
+#: includes/bp-photo-cat-admin-settings/categories-editor.php:56
+msgid "Category count"
+msgstr "Nombre de catégories"
+
+#: includes/bp-photo-cat-admin-settings/categories-editor.php:72
+msgid "Label"
+msgstr "Label"
+
+#: includes/bp-photo-cat-admin-settings/categories-editor.php:81
+msgid "Options"
+msgstr "Options"
+
+#: includes/bp-photo-cat-admin-settings/categories-editor.php:120
+msgid "Category name"
+msgstr "Nom de catégorie"
+
+#: includes/bp-photo-cat-gallery/photo-gallery.php:115
+msgid "You must enter a title for the new collection."
+msgstr "Vous devez entrer un titre pour la nouvelle collection."
+
+#: includes/bp-photo-cat-gallery/photo-gallery.php:120
+msgid "The new collection's title cannot be longer than 30 characters."
+msgstr "Le titre de la nouvelle collection ne doit pas faire plus de 30 charactères."
+
+#: includes/bp-photo-cat-gallery/photo-gallery.php:125
+msgid "A collection with this title already exists."
+msgstr "Une collection avec ce titre existe déjà."
+
+#: includes/bp-photo-cat-gallery/photo-gallery.php:132
+msgid "Failed creating the new collection."
+msgstr "Échec lors de la création de la nouvelle collection."
+
+#: includes/bp-photo-cat-gallery/photo-gallery.php:143
+msgid "Failed adding the media to the new collection."
+msgstr "Échec lors de l'ajout du média à la nouvelle collection."
+
+#: includes/bp-photo-cat-integration/buddyboss-integration.php:74
+msgid "Settings"
+msgstr "Paramètres"
+
+msgid "Save"
+msgstr "Enregistrer"
+
+msgid "Create collection"
+msgstr "Créer un tableau"
+
+msgid "Create My Collection"
+msgstr "Créer mon tableau"
+
+msgid "Collection name"
+msgstr "Nom du tableau"
+
+msgid "Create"
+msgstr "Créer"
