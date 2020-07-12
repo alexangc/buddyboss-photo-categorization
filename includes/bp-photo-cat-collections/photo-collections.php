@@ -25,7 +25,13 @@ function PHOTOCAT_collections()
     wp_enqueue_script('photo-collections', $js);
     wp_enqueue_script('photocat-simple-lightbox', $lb_js);
 
-    $collections = PHOTOCAT_get_current_user_collections();
+    if ($_GET['collection_id'] && $_GET['collection_title']) {
+        // Direct access to a collection's content: we let the template empty,
+        // the collection gallery being frontend rendered
+        $collections = [];
+    } else {
+        $collections = PHOTOCAT_get_current_user_collections();
+    }
 
     $smarty = new Smarty();
     $smarty->assign('collections', $collections);
