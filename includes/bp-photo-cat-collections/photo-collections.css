@@ -48,7 +48,49 @@
   cursor:pointer;
 }
 
+.photocat-photo-frame {
+  width: 260px;
+  height: 400px;
+  margin-left: 20px;
+  margin-top: 10px;
+  object-fit: cover;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+}
+
+.photocat-img {
+  height: 100%;
+  object-fit: cover;
+}
+
 /* Fixes elementor's global style */
 .slbElement button {
   background-color: unset !important;
+}
+
+
+/* "Back" button on collection's details gallery */
+span.previous {
+  text-decoration: none;
+  display: inline-block;
+  padding: 25px 25px;
+  position: absolute;
+  left: 0px;
+  top: -14px;
+  cursor: pointer;
+}
+
+span.previous:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.previous {
+  background-color: #f1f1f1;
+  color: black;
+}
+
+.round {
+  border-radius: 50%;
 }
