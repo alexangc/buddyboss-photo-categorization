@@ -142,12 +142,14 @@
           )[0].content.querySelector("option"),
           true
         );
-        $(createCollection).click(() => {
-          openCreateCollectionModal(mediaId);
-          const defaultOption = $(select).find(".dash-default");
-          $(defaultOption).attr("selected", true);
-        });
-
+        $(select).change(function () {
+          const selectedId = $(this).children("option:selected").attr('id')
+          if (selectedId === $(createCollection).attr('id')) {
+            openCreateCollectionModal(mediaId);
+            const defaultOption = $(select).find(".dash-default");
+            $(defaultOption).attr("selected", true);
+          }
+        })
         select.append(createCollection);
 
         const sizeLimit = 30;
