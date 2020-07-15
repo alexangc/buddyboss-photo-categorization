@@ -41,7 +41,7 @@
 </template>
 
 <template id='photo-box-template-create-collection-option'>
-  <option>
+  <option id="create-collection">
     + {__('Create collection', 'buddyboss-photo-categorization')}
   </option>
 </template>
